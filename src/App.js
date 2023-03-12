@@ -1,11 +1,17 @@
 import React from "react";
+import { Route, Router, Routes } from "react-router-dom";
+import MainPage from "./components/MainPage";
+import OrderPage from "./components/OrderPage";
 
 const App = () => {
   return (
-    <>
-      <h1>Teknolojik Yemekler</h1>
-      <p>Burdaki kodu silip kendi headerınızı ekleyebilirsiniz</p>
-    </>
+    <div>
+      <Routes>
+        <Route path="/" element={<MainPage />} />
+        <Route path="/siparis-sayfasi" element={<OrderPage />} />
+        {/* <Route path="/siparis-onay" element={<OkPage />} /> */}
+      </Routes>
+    </div>
   );
 };
 export default App;
