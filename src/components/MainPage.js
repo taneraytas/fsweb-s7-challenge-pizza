@@ -31,7 +31,7 @@ export default function MainPage() {
       place-items-center"
       >
         <Link to={"/siparis-sayfasi"}>
-          <button className=" hover:bg-black text-black  hover:text-white font-bold py-2 px-4 rounded-full font-Barlow  bg-yellow-tek w-52">
+          <button className=" hover:bg-black hover:text-yellow-tek   font-bold py-2 px-4 rounded-full font-Barlow  bg-yellow-tek w-52">
             ACIKTIM
           </button>
         </Link>

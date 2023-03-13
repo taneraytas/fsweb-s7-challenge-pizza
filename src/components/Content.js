@@ -1,4 +1,5 @@
 import React from "react";
+import { Link } from "react-router-dom";
 
 export default function Content() {
   const checkData = [
@@ -22,20 +23,13 @@ export default function Content() {
       <h3 className="font-Barlow font-bold mt-5">
         Position Absolute Acılı Pizza
       </h3>
-      <div className="flex justify-between w-[50vw]">
-        <div> 85 </div>
-        <div>
-          <div>4.9</div>
-          <div>(200)</div>
-        </div>
-      </div>
-      {/* <div className="grid grid-cols-2 mt-10 mb-5">
+      <div className="grid grid-cols-2 mt-10 mb-5">
         <div className="font-bold text-xl ">85.50₺</div>
         <div className="grid grid-cols-2 text-gray-400 text-sm">
           <div>4.9</div>
           <div>(200)</div>
         </div>
-      </div> */}
+      </div>
       <p className="text-gray-400 text-justify  text-sm">
         Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent
         convallis ornare dui in lacinia. Phasellus odio nunc, pretium vitae
@@ -79,7 +73,7 @@ export default function Content() {
               </div>
             </li>
 
-            <li className="w-full">
+            <li className="w-full  ">
               <div className="flex items-center ">
                 <input id="list-radio-large" type="radio" name="list-radio" />
                 <label
@@ -97,7 +91,7 @@ export default function Content() {
             Hamur Seç <span className="text-red-500 font-bold">*</span>{" "}
           </div>
           <div>
-            <div class="inline-block relative w-60">
+            <div class="inline-block relative w-[100%]">
               <select class="block appearance-none w-full bg-white border border-gray-400 hover:border-gray-500 px-4 py-2 pr-8 rounded shadow leading-tight focus:outline-none focus:shadow-outline">
                 <option disabled selected>
                   Hamur Kalınlığı
@@ -151,8 +145,56 @@ export default function Content() {
           placeholder="Siparişine eklemek istediğin bir not var mı?"
         ></textarea>
       </div>
-      <hr className="m-5 w-auto" />
-      dasdas
+
+      <hr className="my-10 border-zinc-500" />
+
+      <div>
+        <h3 className="font-Barlow font-bold mt-5 mb-3">Ad Soyad</h3>
+
+        <input
+          id="message"
+          type="text"
+          rows="4"
+          className="p-2.5 w-full h-13 text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-yellow-400 focus:border-yellow-500 resize-none"
+        ></input>
+      </div>
+      <hr className="my-10 border-zinc-500" />
+
+      <div className="flex justify-between">
+        <div className="flex justify-start">
+          <button className="w-12 h-12 border rounded-md bg-yellow-tek hover:bg-amber-200">
+            -
+          </button>
+          <div className="w-12 h-12 border rounded-md flex items-center justify-center">
+            1
+          </div>
+          <button className="w-12 h-12 border rounded-md bg-yellow-tek hover:bg-amber-200">
+            +
+          </button>
+        </div>
+        <div className="mb-32">
+          <div className="border p-8 rounded-sm border-zinc-300 ">
+            <div className="text-lg font-bold font-Barlow mb-4 mr-32 ">
+              Sipariş Toplamı
+            </div>
+            <div className="flex justify-between font-Barlow ">
+              <div>Seçimler</div>
+              <div>25.00₺</div>
+            </div>
+            <div className="flex justify-between font-Barlow font-bold text-red">
+              <div>Toplam</div>
+              <div>110.50₺</div>
+            </div>
+          </div>
+          <div>
+            <Link to="/Success">
+              <button className="w-80 h-12 bg-yellow-tek hover:border-y-4 hover:border-zinc-500  rounded-sm">
+                Sipariş Ver
+              </button>
+            </Link>
+          </div>
+        </div>
+      </div>
     </div>
   );
 }
