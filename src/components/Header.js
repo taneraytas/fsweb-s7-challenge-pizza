@@ -12,8 +12,8 @@ export default function Header() {
        bg-red-600 
        "
       >
-        <img className=" scale-75 mb-7 text-[1.5rem]" src={logo} />
-        <div className="w-[70vw] mb-5">
+        <img className=" scale-75 mb-7 text-[1.5rem]" src={logo} alt="logo" />
+        <div className="w-[50vw] mb-5">
           <nav className="text-stone-300 ">
             <Link to="/">Anasayfa</Link>
             <span> - </span>

@@ -10,7 +10,7 @@ export default function MainPage() {
       place-items-center 
       pt-20"
       >
-        <img src={logo} />
+        <img src={logo} alt="logo" />
       </div>
 
       <div
