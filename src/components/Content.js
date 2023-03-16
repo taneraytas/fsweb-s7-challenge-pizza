@@ -30,8 +30,9 @@ const submitForm = {
   ad: "",
   pizzaSecimi: "",
   pizzaBoyutu: "",
-  hamurTipi: "",
+  listRadio: "",
   toplamFiyat: "",
+  malzemeler: "",
 };
 
 export default function Content() {
@@ -39,6 +40,10 @@ export default function Content() {
   const [adet, setAdet] = useState(1);
   const [datalar, setDatalar] = useState([...checkData]);
   const [formInfo, setFormInfo] = useState({ ...submitForm });
+
+  const changeHandler = (e) => {
+    setFormInfo({ ...formInfo, [e.target.name]: e.target.value });
+  };
 
   const arttir = () => {
     setAdet(adet + 1);
@@ -55,6 +60,10 @@ export default function Content() {
   const secimlerToplam = () => {
     return `${adetMalzeme * 5}₺`;
   };
+  const checkboxChangeHandler = (e) => {
+    const { name, checked } = e.target;
+    setFormInfo({ ...formInfo, [name]: checked });
+  };
 
   useEffect(() => {
     const filteredArr = datalar.filter((item) => {
@@ -62,9 +71,6 @@ export default function Content() {
     });
     setAdetMalzeme(filteredArr.length);
     console.log(filteredArr);
-    // filteredArr.forEach((item, index) => {
-    //   setFormInfo({ ...formInfo }, (formInfo.malzeme = item.value));
-    // });
   }, [datalar]);
 
   return (
@@ -77,7 +83,7 @@ export default function Content() {
           <div>({pizza.yorum})</div>
         </div>
       </div>
-      <p className="text-gray-400 text-justify  text-sm">
+      <p className="text-zinc-400 text-justify  text-sm">
         Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent
         convallis ornare dui in lacinia. Phasellus odio nunc, pretium vitae
         rhoncus sed, pretium vitae ante. Proin consequat risus vel nisl cursus
@@ -91,16 +97,18 @@ export default function Content() {
       </p>
 
       <form onSubmit={(e) => e.preventDefault()}>
-        <div className="grid grid-cols-2 place-items-start mt-10">
-          <div>
-            <h3 className="font-semibold mb-4">
+        {/* <div className="grid grid-cols-2 place-items-start mt-10"> */}
+
+        <div className="flex justify-between mt-10">
+          <div className="flex flex-col">
+            <h3 className="font-semibold mb-1">
               Boyut Seç <span className="text-red-500 font-bold">*</span>
             </h3>
 
             <ul>
               <li className="w-full">
                 <div className="flex items-center ">
-                  <input id="list-radio-small" type="radio" name="list-radio" />
+                  <input id="list-radio-small" type="radio" name="listRadio" />
                   <label
                     htmlFor="list-radio-small"
                     className="w-full py-1 ml-2 text-sm font-medium text-zinc-500 dark:text-zinc-500"
@@ -112,7 +120,7 @@ export default function Content() {
 
               <li className="w-full">
                 <div className="flex items-center ">
-                  <input id="list-radio-mid" type="radio" name="list-radio" />
+                  <input id="list-radio-mid" type="radio" name="listRadio" />
                   <label
                     htmlFor="list-radio-mid"
                     className="w-full py-1 ml-2 text-sm font-medium text-zinc-500 dark:text-zinc-500"
@@ -124,7 +132,7 @@ export default function Content() {
 
               <li className="w-full  ">
                 <div className="flex items-center ">
-                  <input id="list-radio-large" type="radio" name="list-radio" />
+                  <input id="list-radio-large" type="radio" name="listRadio" />
                   <label
                     htmlFor="list-radio-large"
                     className="w-full py-1 ml-2 text-sm font-medium text-zinc-500 dark:text-zinc-500"
@@ -141,13 +149,15 @@ export default function Content() {
             </div>
             <div>
               <div className="inline-block relative w-[100%]">
-                <select className="block appearance-none w-full bg-white border border-gray-400 hover:border-gray-500 px-4 py-2 pr-8 rounded shadow leading-tight focus:outline-none focus:shadow-outline">
-                  <option disabled value={"selected"}>
-                    Hamur Kalınlığı
-                  </option>
-                  <option>İnce</option>
-                  <option>Kalın</option>
-                  <option>Kaşar Peynirli</option>
+                <select
+                  className="block appearance-none w-full bg-white border border-gray-400 hover:border-gray-500 px-4 py-2 pr-8 rounded shadow leading-tight focus:outline-none focus:shadow-outline"
+                  name="selected"
+                  onChange={changeHandler}
+                >
+                  <option disabled>Hamur Kalınlığı</option>
+                  <option name="selected">İnce</option>
+                  <option name="selected">Kalın</option>
+                  <option name="selected">Kaşar Peynirli</option>
                 </select>
                 <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
                   <svg
@@ -168,7 +178,7 @@ export default function Content() {
             En fazla 10 malzeme seçebilirsiniz. (Adet: 5₺)
           </p>
         </div>
-        <div className="grid grid-cols-3  mb-20">
+        <div className="flex flex-col flex-wrap h-60">
           {checkData.map((item, index) => (
             <div key={item.id}>
               <input
@@ -177,10 +187,14 @@ export default function Content() {
                 name="malzemeler"
                 className="mt-3"
                 checked={item.status}
-                onChange={() => statusChange(item, index)}
+                onChange={() => (
+                  statusChange(item, index),
+                  checkboxChangeHandler,
+                  console.log(formInfo)
+                )}
               />
               <label htmlFor={item.id} className="ml-2">
-                {`${item.value} -> ${item.status}`}
+                {item.value}
               </label>
             </div>
           ))}
