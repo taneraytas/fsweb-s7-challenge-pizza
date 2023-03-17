@@ -1,6 +1,9 @@
+import axios from "axios";
 import React from "react";
 import { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
+import { Link, Navigate } from "react-router-dom";
+import * as Yup from "yup";
+import Success from "./Success";
 
 const pizza = {
   isim: "Full Stack Developer Pizzası",
@@ -10,59 +13,75 @@ const pizza = {
 };
 
 const checkData = [
-  { id: "1", value: "Papperroni", status: false },
-  { id: "2", value: "Domates", status: false },
-  { id: "3", value: "Biber", status: false },
-  { id: "4", value: "Sosis", status: false },
-  { id: "5", value: "Mısır", status: false },
-  { id: "6", value: "Sucuk", status: false },
-  { id: "7", value: "Kanada Jambonu", status: false },
-  { id: "8", value: "Pastırma", status: false },
-  { id: "9", value: "Ananas", status: false },
-  { id: "10", value: "Tavuk Izgara", status: false },
-  { id: "11", value: "Jalepeno", status: false },
-  { id: "12", value: "Kabak", status: false },
-  { id: "13", value: "Soğan", status: false },
-  { id: "14", value: "Sarımsak", status: false },
+  { id: "malzeme 1", value: "Papperroni", status: false },
+  { id: "malzeme 2", value: "Domates", status: false },
+  { id: "malzeme 3", value: "Biber", status: false },
+  { id: "malzeme 4", value: "Sosis", status: false },
+  { id: "malzeme 5", value: "Mısır", status: false },
+  { id: "malzeme 6", value: "Sucuk", status: false },
+  { id: "malzeme 7", value: "Kanada Jambonu", status: false },
+  { id: "malzeme 8", value: "Pastırma", status: false },
+  { id: "malzeme 9", value: "Ananas", status: false },
+  { id: "malzeme 10", value: "Tavuk Izgara", status: false },
+  { id: "malzeme 11", value: "Jalepeno", status: false },
+  { id: "malzeme 12", value: "Kabak", status: false },
+  { id: "malzeme 13", value: "Soğan", status: false },
+  { id: "malzeme 14", value: "Sarımsak", status: false },
 ];
 
 const submitForm = {
-  ad: "",
-  pizzaSecimi: "",
-  pizzaBoyutu: "",
-  listRadio: "",
+  ad: pizza.isim,
+  boyut: "",
+  adet: "",
   toplamFiyat: "",
   malzemeler: "",
+  not: "",
+  musteri: "",
 };
 
 export default function Content() {
   const [adetMalzeme, setAdetMalzeme] = useState(0);
   const [adet, setAdet] = useState(1);
+  const [toplam, setToplam] = useState(pizza.fiyat);
   const [datalar, setDatalar] = useState([...checkData]);
   const [formInfo, setFormInfo] = useState({ ...submitForm });
+  const [formInfoErr, setFormInfoErr] = useState({ ...submitForm });
+  const [buttonDisabled, setButtonDisabled] = useState(true);
+
+  const orderFormSchema = Yup.object().shape({
+    boyut: Yup.string().required("Boyut Seçimi Zorunludur."),
+    musteri: Yup.string()
+      .min(2, "İsim en az 2 karakterli olmalı.")
+      .required("İsim alanı zorunludur."),
+  });
 
   const changeHandler = (e) => {
     setFormInfo({ ...formInfo, [e.target.name]: e.target.value });
   };
 
-  const arttir = () => {
-    setAdet(adet + 1);
+  const arttir = (e) => {
+    e.preventDefault();
+    return setAdet(adet + 1);
   };
-  const azalt = () => {
-    adet > 0 ? setAdet(adet - 1) : setAdet(adet);
+  const azalt = (e) => {
+    e.preventDefault();
+    return adet > 1 ? setAdet(adet - 1) : setAdet(adet);
   };
   const statusChange = (item, i) => {
     const newDatalar = [...datalar];
     newDatalar[i].status = !newDatalar[i].status;
     setDatalar(newDatalar);
+
     // console.log(newDatalar);
   };
   const secimlerToplam = () => {
-    return `${adetMalzeme * 5}₺`;
+    return adetMalzeme * 5;
   };
-  const checkboxChangeHandler = (e) => {
-    const { name, checked } = e.target;
-    setFormInfo({ ...formInfo, [name]: checked });
+
+  const getSubmit = () => {
+    axios
+      .post("https://reqres.in/api/orders", formInfo)
+      .then((res) => console.log(res.data));
   };
 
   useEffect(() => {
@@ -70,8 +89,34 @@ export default function Content() {
       return item.status === true;
     });
     setAdetMalzeme(filteredArr.length);
-    console.log(filteredArr);
-  }, [datalar]);
+
+    const secilenMalzemeler = {};
+    filteredArr.forEach((item, index) => {
+      secilenMalzemeler[index] = item.value;
+
+      setFormInfo({
+        ...formInfo,
+        ["malzemeler"]: secilenMalzemeler,
+        ["adet"]: adet,
+      });
+    });
+  }, [datalar, adet]);
+
+  useEffect(() => {
+    setToplam(adet * pizza.fiyat + adetMalzeme * 5);
+
+    setFormInfo({ ...formInfo, ["toplamFiyat"]: toplam });
+  }, [secimlerToplam()]);
+
+  useEffect(() => {
+    orderFormSchema
+      .isValid(formInfo)
+      .then((valid) => setButtonDisabled(!valid));
+  }, [formInfo]);
+
+  // useEffect(() => {
+  //   return getSubmit();
+  // }, [formInfo]);
 
   return (
     <div className="w-[50vw] m-auto">
@@ -96,7 +141,7 @@ export default function Content() {
         nascetur ridiculus mus.
       </p>
 
-      <form onSubmit={(e) => e.preventDefault()}>
+      <form onSubmit={((e) => e.preventDefault(), changeHandler, getSubmit)}>
         {/* <div className="grid grid-cols-2 place-items-start mt-10"> */}
 
         <div className="flex justify-between mt-10">
@@ -108,7 +153,13 @@ export default function Content() {
             <ul>
               <li className="w-full">
                 <div className="flex items-center ">
-                  <input id="list-radio-small" type="radio" name="listRadio" />
+                  <input
+                    id="list-radio-small"
+                    type="radio"
+                    name="boyut"
+                    value="küçük"
+                    onChange={changeHandler}
+                  />
                   <label
                     htmlFor="list-radio-small"
                     className="w-full py-1 ml-2 text-sm font-medium text-zinc-500 dark:text-zinc-500"
@@ -120,7 +171,13 @@ export default function Content() {
 
               <li className="w-full">
                 <div className="flex items-center ">
-                  <input id="list-radio-mid" type="radio" name="listRadio" />
+                  <input
+                    id="list-radio-mid"
+                    type="radio"
+                    name="boyut"
+                    value="orta"
+                    onChange={changeHandler}
+                  />
                   <label
                     htmlFor="list-radio-mid"
                     className="w-full py-1 ml-2 text-sm font-medium text-zinc-500 dark:text-zinc-500"
@@ -132,7 +189,13 @@ export default function Content() {
 
               <li className="w-full  ">
                 <div className="flex items-center ">
-                  <input id="list-radio-large" type="radio" name="listRadio" />
+                  <input
+                    id="list-radio-large"
+                    type="radio"
+                    name="boyut"
+                    value="büyük"
+                    onChange={changeHandler}
+                  />
                   <label
                     htmlFor="list-radio-large"
                     className="w-full py-1 ml-2 text-sm font-medium text-zinc-500 dark:text-zinc-500"
@@ -187,11 +250,9 @@ export default function Content() {
                 name="malzemeler"
                 className="mt-3"
                 checked={item.status}
-                onChange={() => (
-                  statusChange(item, index),
-                  checkboxChangeHandler,
-                  console.log(formInfo)
-                )}
+                onChange={() => statusChange(item, index)}
+                disabled={adetMalzeme < 10 ? false : true}
+                data-test-id={`cb${item.id}`}
               />
               <label htmlFor={item.id} className="ml-2">
                 {item.value}
@@ -207,6 +268,8 @@ export default function Content() {
             rows="4"
             className="p-2.5 w-full h-13 text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-yellow-400 focus:border-yellow-500 resize-none"
             placeholder="Siparişine eklemek istediğin bir not var mı?"
+            onChange={changeHandler}
+            name="not"
           ></textarea>
         </div>
 
@@ -216,10 +279,14 @@ export default function Content() {
           <h3 className="font-Barlow font-bold mt-5 mb-3">Ad Soyad</h3>
 
           <input
-            id="message"
+            data-test-id="name-input"
+            id="adSoyad"
             type="text"
             rows="4"
             className="p-2.5 w-full h-13 text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-yellow-400 focus:border-yellow-500 resize-none"
+            name="musteri"
+            onChange={changeHandler}
+            invalid={formInfoErr.musteri}
           ></input>
         </div>
         <hr className="my-10 border-zinc-500" />
@@ -259,14 +326,23 @@ export default function Content() {
               </div>
             </div>
             <div>
-              <Link to="/">
-                <button className="w-80 h-12 bg-yellow-tek hover:border-y-4 hover:border-zinc-500  rounded-sm">
+              <Link to="/Success">
+                <button
+                  id="order-button"
+                  className="w-80 h-12 bg-yellow-tek hover:border-y-4 hover:border-zinc-500  rounded-sm"
+                  onClick={(e) => {
+                    getSubmit();
+                    console.log(formInfo);
+                  }}
+                  disabled={buttonDisabled}
+                >
                   Sipariş Ver
                 </button>
               </Link>
             </div>
           </div>
         </div>
+        <Success formInfo={formInfo} />
       </form>
     </div>
   );

@@ -2,6 +2,7 @@ import React from "react";
 import { Route, Routes } from "react-router-dom";
 import MainPage from "./components/MainPage";
 import OrderPage from "./components/OrderPage";
+import Success from "./components/Success";
 
 const App = () => {
   return (
@@ -9,7 +10,7 @@ const App = () => {
       <Routes>
         <Route path="/" element={<MainPage />} />
         <Route path="/siparis-sayfasi" element={<OrderPage />} />
-        {/* <Route path="/siparis-onay" element={<OkPage />} /> */}
+        <Route path="/Success" element={<Success  />} />
       </Routes>
     </div>
   );

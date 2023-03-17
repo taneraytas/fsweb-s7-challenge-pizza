@@ -103,7 +103,7 @@ Gerekli öğelerinizi bitirdikten sonra çalışmanızı daha da ileri götüreb
 
 Aşağıdaki soruları yanıtlayarak bu sprint'in kavramlarını anladığınızı gösterin. Her sorudan sonra yanıtlarınızı eklemek için bu belgeyi düzenleyin.
 
-1. 1-2 cümle ile, React'ın `useRouteMatch` hookunun ne için kullanıdığını açıklayın.
+1. 1-2 cümle ile, React'ın ` </form>` hookunun ne için kullanıdığını açıklayın.
 2. Daha önce hiç programlama yapmamış birine form validationı(doğrulama) nasıl açıklarsınız?
 3. 1-2 cümle ile, uç uca testlerin ne işe yaradığını açıklayın.
 
