@@ -342,7 +342,6 @@ export default function Content() {
             </div>
           </div>
         </div>
-        <Success formInfo={formInfo} />
       </form>
     </div>
   );
